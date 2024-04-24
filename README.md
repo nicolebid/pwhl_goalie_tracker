@@ -10,7 +10,7 @@ By providing a convenient way to interact with goalie statistics, like save perc
 
 ## App Description
 
-This app allows users to view a variety of goaltender statistics, including: save percentage, average goals against per game, shutouts and the amount of wins and losses, along with the overall team standings. Check out the video below for a demo. 
+This app allows users to view a variety of goaltender statistics, including: save percentage, average goals against per game, shutouts and the amount of wins and losses. It also includes the overall team standings. Check out the video below for a demo. 
 
 
 ## Installation Instructions 
