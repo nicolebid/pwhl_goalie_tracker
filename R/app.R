@@ -189,7 +189,7 @@ server <- function(input, output, session) {
     }
   })
   
-  # GOALIE WIN & LOSS PLOT ------------------------------------------------- GWL
+  # GOALIE WIN/LOSS PLOT ----------------------------------------------------GWL
   output$gwl_plot <- renderPlot({ 
     
     # check if teams are selected (Default: plot all teams)
@@ -228,9 +228,42 @@ server <- function(input, output, session) {
       goalie_wl_filter$player_name <- factor(goalie_wl_filter$player_name, 
                                              levels = order)
       
-      # main plot
-      ggplot(goalie_wl_filter, aes(x = player_name, y = count, 
-                                   fill = outcome)) +
+      # adjust plot labels for 'wins' selection & no team selected
+      if (order_select == "wins") {
+        
+        ggplot(goalie_wl_filter, aes(x = player_name, y = count, 
+                                     fill = outcome)) +
+          geom_bar(data = subset(goalie_wl_filter, outcome == "wins"), 
+                   stat = "identity") +
+          geom_bar(data = subset(goalie_wl_filter, outcome == "losses"),
+                   aes(y = -count, fill = outcome), stat = "identity") +
+          labs(title = "Losses and Wins by Goalie",
+               x = "Goalie",
+               y = "Count") +
+          scale_fill_manual(values = c("wins" = "darkslateblue",
+                                       "losses" = "indianred2"),
+                            guide = guide_legend(title = NULL)) +
+          theme_minimal() +
+          theme(plot.title = element_text(face = "bold", size = 14, hjust=0.04),
+                axis.text = element_text(size = 14),
+                legend.text = element_text(size = 12),
+                legend.position = "right",
+                axis.title.x = element_text(size = 14),
+                axis.title.y = element_text(size = 14), 
+                plot.title.position = "plot") +
+          coord_flip() +
+          geom_text(data = subset(goalie_wl_filter, outcome == "wins"),
+                    aes(label = !!sym(label_m), y = count), hjust = -0.5,
+                    color = "black", size = 4) +
+          geom_text(data = subset(goalie_wl_filter, outcome == "losses"),
+                    aes(label = team, y = -count), hjust = 1.3,
+                    color = "black", size = 4) +
+          expand_limits(y = c(-8, 14))
+        } else {
+        
+        # 'wins' not selected and no team selected   
+        ggplot(goalie_wl_filter, aes(x = player_name, y = count, 
+                                       fill = outcome)) +
         geom_bar(data = subset(goalie_wl_filter, outcome == "wins"), 
                  stat = "identity") +
         geom_bar(data = subset(goalie_wl_filter, outcome == "losses"),
@@ -242,12 +275,13 @@ server <- function(input, output, session) {
                                      "losses" = "indianred2"),
                           guide = guide_legend(title = NULL)) +
         theme_minimal() +
-        theme(plot.title = element_text(face = "bold", size = 14),
+        theme(plot.title = element_text(face = "bold", size = 14, hjust=0.04),
               axis.text = element_text(size = 14),
               legend.text = element_text(size = 12),
-              legend.position = "top",
+              legend.position = "right",
               axis.title.x = element_text(size = 14),
-              axis.title.y = element_text(size = 14)) +
+              axis.title.y = element_text(size = 14), 
+              plot.title.position = "plot") +
         coord_flip() +
         geom_text(data = subset(goalie_wl_filter, outcome == "losses"),
                   aes(label = !!sym(label_m), y = -count), hjust = 1.5,
@@ -255,9 +289,9 @@ server <- function(input, output, session) {
         geom_text(data = subset(goalie_wl_filter, outcome == "wins"),
                   aes(label = team, y = count), hjust = -0.2,
                   color = "black", size = 4) +
-        expand_limits(y = c(-8, 14))
-
-    } else {
+        expand_limits(y = c(-8, 14))}
+      
+    } else { 
     
     # filter data for desired subset
     goalie_wl_filter <- subset(goalie_wl, team_full %in% input$team_select)
@@ -289,63 +323,94 @@ server <- function(input, output, session) {
       label_m <- "prop_w"
     }
     
-    
     # relevel data
     goalie_wl_filter$player_name <- factor(goalie_wl_filter$player_name, 
                                            levels = order)
-  
-    # main plot
-    ggplot(goalie_wl_filter, aes(x = player_name, y = count, fill = outcome)) +
-      geom_bar(data = subset(goalie_wl_filter, outcome == "wins"),
-               stat = "identity") +
-      geom_bar(data = subset(goalie_wl_filter, outcome == "losses"),
-               aes(y = -count, fill = outcome), stat = "identity") +
-      labs(title = "Losses and Wins by Goalie",
-           x = "Goalie",
-           y = "Count") +
-      scale_fill_manual(values = c("wins" = "darkslateblue",
-                                   "losses" = "indianred2"),
-                        guide = guide_legend(title = NULL)) +
-      theme_minimal() +
-      theme(plot.title = element_text(face = "bold", size = 14),
-            axis.text = element_text(size = 14),
-            legend.text = element_text(size = 12),
-            legend.position = "top",
-            axis.title.x = element_text(size = 14),
-            axis.title.y = element_text(size = 14)) +
-      coord_flip() +
-      geom_text(data = subset(goalie_wl_filter, outcome == "losses"),
-                aes(label = !!sym(label_m), y = -count), hjust = 1.5,
-                color = "black", size = 4) +
-      geom_text(data = subset(goalie_wl_filter, outcome == "wins"),
-                aes(label = team, y = count), hjust = -0.2,
-                color = "black", size = 4) +
-      expand_limits(y = c(-8, 14))
+
+    # adjust plot labels for 'wins' selected and teams selected 
+    if (order_select == "wins"){
+      ggplot(goalie_wl_filter, aes(x = player_name, y = count, fill = outcome)) +
+        geom_bar(data = subset(goalie_wl_filter, outcome == "wins"),
+                 stat = "identity") +
+        geom_bar(data = subset(goalie_wl_filter, outcome == "losses"),
+                 aes(y = -count, fill = outcome), stat = "identity") +
+        labs(title = "Losses and Wins by Goalie",
+             x = "Goalie",
+             y = "Count") +
+        scale_fill_manual(values = c("wins" = "darkslateblue",
+                                     "losses" = "indianred2"),
+                          guide = guide_legend(title = NULL)) +
+        theme_minimal() +
+        theme(plot.title = element_text(face = "bold", size = 14, hjust=0.04),
+              axis.text = element_text(size = 14),
+              legend.text = element_text(size = 12),
+              legend.position = "right",
+              axis.title.x = element_text(size = 14),
+              axis.title.y = element_text(size = 14), 
+              plot.title.position = "plot") +
+        coord_flip() +
+        geom_text(data = subset(goalie_wl_filter, outcome == "wins"),
+                  aes(label = !!sym(label_m), y = count), hjust = -0.5,
+                  color = "black", size = 4) +
+        geom_text(data = subset(goalie_wl_filter, outcome == "losses"),
+                  aes(label = team, y = -count), hjust = 1.3,
+                  color = "black", size = 4) +
+        expand_limits(y = c(-8, 14))
+      
+    } else {
+      
+      # 'wins not selected and teams selected 
+      ggplot(goalie_wl_filter, aes(x = player_name, y = count, fill = outcome)) +
+        geom_bar(data = subset(goalie_wl_filter, outcome == "wins"),
+                 stat = "identity") +
+        geom_bar(data = subset(goalie_wl_filter, outcome == "losses"),
+                 aes(y = -count, fill = outcome), stat = "identity") +
+        labs(title = "Losses and Wins by Goalie",
+             x = "Goalie",
+             y = "Count") +
+        scale_fill_manual(values = c("wins" = "darkslateblue",
+                                     "losses" = "indianred2"),
+                          guide = guide_legend(title = NULL)) +
+        theme_minimal() +
+        theme(plot.title = element_text(face = "bold", size = 14, hjust=0.04),
+              axis.text = element_text(size = 14),
+              legend.text = element_text(size = 12),
+              legend.position = "right",
+              axis.title.x = element_text(size = 14),
+              axis.title.y = element_text(size = 14), 
+              plot.title.position = "plot") +
+        coord_flip() +
+        geom_text(data = subset(goalie_wl_filter, outcome == "losses"),
+                  aes(label = !!sym(label_m), y = -count), hjust = 1.5,
+                  color = "black", size = 4) +
+        geom_text(data = subset(goalie_wl_filter, outcome == "wins"),
+                  aes(label = team, y = count), hjust = -0.2,
+                  color = "black", size = 4) +
+        expand_limits(y = c(-8, 14))
+      
     }
-    })
+    }
+  })
   
   # SAVE PERCENTAGE----------------------------------------------------------SP
   
-  selectedGoalie <- reactiveVal(NULL)
+  select_goalie <- reactiveVal(NULL)
   
   observeEvent(input$sp_table_rows_selected, {
     if (!is.null(input$sp_table_rows_selected)) {
       # Get the index of the selected row
-      selectedRowIndex <- input$sp_table_rows_selected
+      row_index <- input$sp_table_rows_selected
       
       # Get the value of the "player_name" from the selected row
-      selectedPlayer <- save_goals[selectedRowIndex, "player_name"]
+      player <- save_goals[row_index, "player_name"]
       
       # Update the selected goalie value
-      selectedGoalie(selectedPlayer)
+      select_goalie(player)
     } else {
-      # If no row is selected, set selected goalie to NULL
-      selectedGoalie(NULL)
+      select_goalie(NULL)
     }
   })
-  
-  
-  
+
   output$sp_table <- renderDT({
     
     datatable(save_goals %>%
@@ -361,7 +426,7 @@ server <- function(input, output, session) {
   }) 
   
   output$selected_goalie_summary <- renderText({
-    selected <- selectedGoalie()
+    selected <- select_goalie()
     if (!is.null(selected)) {
       goalie <- selected[[1]]
       
