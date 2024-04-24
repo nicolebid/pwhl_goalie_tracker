@@ -4,6 +4,7 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 library(ggrepel)
+library(plotly)
 library(DT)
 
 team_ranking <- read_csv("../data/team_ranking.csv") 
@@ -11,10 +12,10 @@ goalie_wl <- read_csv("../data/goalie_wl.csv")
 save_goals <- read_csv("../data/save_goals.csv")
 
 teams <- c("Boston", "Minnesota", "Montreal", "New York",  "Ottawa", "Toronto")
-gwl_metrics <- c("wins", "losses", "win to loss differential", "proportion of wins")
+gwl_metrics <- c("wins", "losses", "win to loss differential", 
+                 "proportion of wins")
 
 
-# UI
 ui <- fluidPage(
   
   # Header
@@ -53,10 +54,15 @@ ui <- fluidPage(
       
       # table
       DTOutput("sp_table"), 
-      textOutput("additional_text"),
-      br(), 
-      textOutput("selected_goalie_summary")
-      
+      p("Click on a goalie to display additional statistics.", 
+        style = "font-style: italic;"),
+     
+       # individual goalie plot 
+      div(
+        textOutput("selected_goalie_title"),
+        style = "margin-bottom: 0px; font-weight: bold;"
+      ),
+      plotlyOutput("ind_plot", height = "150px")
       
     ),
     
@@ -68,6 +74,7 @@ ui <- fluidPage(
         style = "background-color: #f2f2f2; padding: 10px; margin-bottom: 15px;",
         plotOutput("team_plot", height = "325px")
       ),
+      
       # GWL plot and order select
       div(
         style = "background-color: #f2f2f2; padding: 10px;",
@@ -88,12 +95,9 @@ ui <- fluidPage(
   )
 )
 
-
-
-# Server: Callbacks/reactivity
 server <- function(input, output, session) {
   
-  # TEAM RANKING PLOT ----------------------------------------------------- RANK
+  # team ranking plot --------------------------------------------------------
   output$team_plot <- renderPlot({
     team_colors <- c("New York" = rgb(0, 170, 170, maxColorValue = 255), 
                      "Boston" = "darkgreen", 
@@ -189,7 +193,7 @@ server <- function(input, output, session) {
     }
   })
   
-  # GOALIE WIN/LOSS PLOT ----------------------------------------------------GWL
+  # Goalie win/loss plot  ----------------------------------------------------
   output$gwl_plot <- renderPlot({ 
     
     # check if teams are selected (Default: plot all teams)
@@ -329,7 +333,8 @@ server <- function(input, output, session) {
 
     # adjust plot labels for 'wins' selected and teams selected 
     if (order_select == "wins"){
-      ggplot(goalie_wl_filter, aes(x = player_name, y = count, fill = outcome)) +
+      ggplot(goalie_wl_filter, aes(x = player_name, y = count, 
+                                   fill = outcome)) +
         geom_bar(data = subset(goalie_wl_filter, outcome == "wins"),
                  stat = "identity") +
         geom_bar(data = subset(goalie_wl_filter, outcome == "losses"),
@@ -359,8 +364,9 @@ server <- function(input, output, session) {
       
     } else {
       
-      # 'wins not selected and teams selected 
-      ggplot(goalie_wl_filter, aes(x = player_name, y = count, fill = outcome)) +
+      # 'wins' not selected and teams selected 
+      ggplot(goalie_wl_filter, aes(x = player_name, y = count, 
+                                   fill = outcome)) +
         geom_bar(data = subset(goalie_wl_filter, outcome == "wins"),
                  stat = "identity") +
         geom_bar(data = subset(goalie_wl_filter, outcome == "losses"),
@@ -392,19 +398,18 @@ server <- function(input, output, session) {
     }
   })
   
-  # SAVE PERCENTAGE----------------------------------------------------------SP
-  
+  # Save % Table ------------------------------------------------------------
   select_goalie <- reactiveVal(NULL)
   
   observeEvent(input$sp_table_rows_selected, {
     if (!is.null(input$sp_table_rows_selected)) {
-      # Get the index of the selected row
+      
       row_index <- input$sp_table_rows_selected
       
-      # Get the value of the "player_name" from the selected row
+      # player at row selected
       player <- save_goals[row_index, "player_name"]
       
-      # Update the selected goalie value
+      # update goalie
       select_goalie(player)
     } else {
       select_goalie(NULL)
@@ -417,39 +422,97 @@ server <- function(input, output, session) {
                 select(team, player_name, save_percentage),
               rownames = NULL, 
               selection = "single",
-              colnames = c("Team", "Goalie", "Save %"),
+              colnames = c("Team", "Goalie", "Save Percentage"),
               options = list(paging = FALSE, 
                              info = FALSE, 
                              searching = FALSE)
     )
     
-  }) 
+  })
   
-  output$selected_goalie_summary <- renderText({
+  # Individual Goalie Plot -----------------------------------------------------
+  output$ind_plot <- renderPlotly({ 
+    
+    # average goalie stats
+    avg_stats <- save_goals |> 
+      summarise(across(where(is.numeric), ~round(mean(., na.rm = TRUE), 2)))
+
+    goalie <- select_goalie()  
+    
+    # check if goalie selected 
+    if (!is.null(goalie)) {
+      
+      goalie <- goalie[[1]]
+      
+
+      # selected goalie stats 
+      goalie_stats <- save_goals %>% 
+        filter(player_name == goalie)
+      
+      
+      goalie_data <- data.frame(
+        Metric = c("Goals Against (avg/game)", "Shutouts", "Games Played"),
+        Value = c(goalie_stats$goals_against_avg, 
+                   goalie_stats$shutouts, 
+                   goalie_stats$games_played),
+        Average = c(avg_stats$goals_against_avg, 
+                    avg_stats$shutouts, 
+                    avg_stats$games_played)
+      )
+      
+      
+      goalie_plot <- ggplot(goalie_data, aes(y = Metric)) +
+        geom_col(aes(x = Value), fill = "steelblue2", width = 0.5) + 
+        geom_point(aes(x = Average), color = "darkred", size = 2, shape = 18) + 
+        labs(title = NULL,
+             y = NULL,
+             x = NULL) +
+        theme_minimal() +
+        theme(axis.text = element_text(size = 8)) + 
+        xlim(0, 20)
+      
+      return(ggplotly(goalie_plot, tooltip = c("Value", "Average")))
+      
+    } else {
+      
+      goalie_data <- data.frame(
+        Metric = c("Goals Against (avg/game)", "Shutouts", "Games Played"),
+        Average = c(avg_stats$goals_against_avg, 
+                    avg_stats$shutouts, 
+                    avg_stats$games_played)
+      )
+      
+      goalie_plot <- ggplot(goalie_data, aes(y = Metric)) +
+        geom_point(aes(x = Average), color = "darkred", size = 2, shape = 18) + 
+        labs(title = NULL,
+             y = NULL,
+             x = NULL) +
+        theme_minimal() +
+        theme(axis.text = element_text(size = 8)) + 
+        xlim(0, 20)
+      
+      return(ggplotly(goalie_plot, tooltip = c("Average")))
+      
+    }
+    
+  })
+  
+  output$selected_goalie_title <- renderText({
     selected <- select_goalie()
     if (!is.null(selected)) {
       goalie <- selected[[1]]
-      
-      summary_goalie <- save_goals |> filter(player_name == goalie) |> 
-        select(goals_against_avg, games_played, shutouts)
-      goalie_summary <- paste(
-        "Goals Against Average:", summary_goalie$goals_against_avg, 
-        "Games Played:", summary_goalie$games_played,
-        "Shutouts:", summary_goalie$shutouts
+
+      goalie_title <- paste(
+        "Statistics for", goalie, "with Goalie Averages"
       )
-      
-      return(goalie_summary)
-      
+
+      return(goalie_title)
+
     } else {
-      return("")
+      return("Goalie Averages")
     }
   })
-  
-  output$additional_text <- renderText({
-    "Click on a goalie for additional stats. "
-  })
-  
-  
+
 }
 
 shinyApp(ui, server)
