@@ -23,7 +23,12 @@ To run the dashboard locally follow the steps below.
     $ git clone https://github.ubc.ca/MDS-2023-24/DSCI_532_individual-assignment_nbidwell.git
     ```
 
-2. In R or a RStudio console, install `renv` if you don't have it: 
+2. Navigate to the root of the directory: 
+    ```console
+    $ cd DSCI_532_individual-assignment_nbidwell/
+    ```
+    
+4. Open R or Rstudio, and install `renv` if you don't have it: 
 
     ```console
     $ install.packages("renv")
