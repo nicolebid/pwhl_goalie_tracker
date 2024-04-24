@@ -3,6 +3,7 @@ library(readr)
 library(dplyr)
 library(tidyr)
 library(here)
+library(tidyverse)
 
 # TEAM RANKING DATA
 overall_standings <- pwhl_standings(season = 2023, regular = TRUE)
