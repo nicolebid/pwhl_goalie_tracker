@@ -4,11 +4,14 @@
 
 **Target Audience:** Hockey fans!
 
-The Professional Women's Hockey League (PWHL) launched its inaugural season in January 2024. First of its kind, it brings together world-ranking players, to compete among six teams located in North America. With high ticket sales and media coverage from the start, the fan support has been impressive, marking a historic moment in women’s sports in general. While this app serves to further promote the PWHL, it shines a spotlight on one of the most crucial, and sometimes overlooked, aspects of the game: goalies! 
+The Professional Women's Hockey League (PWHL) launched its inaugural season in January 2024. First of its kind, it brings together world-ranking players, to compete among six teams located in North America. With high ticket sales and media coverage from the start, the fan support has been impressive--marking a historic moment in women’s sports overall. While this app serves to further promote the PWHL, it shines a spotlight on one of the most crucial, and sometimes overlooked, aspects of the game: goalies! 
 
 By providing a convenient way to interact with goalie statistics, like save percentage and average goals against, along with overall team rankings, users can dive into the depths of the PWHL.  Beyond enhancing the fan experience, this app recognizes the pivotal role of sports statistics in informing coaching decisions and even facilitating engagement in sports betting. 
 
 ## App Description
+
+This app allows users to view a variety of goaltender statistics, including: save percentage, average goals against per game, shutouts and the amount of wins and losses, along with the overall team standings. Check out the video below for a demo. 
+
 
 ## Installation Instructions 
 
