@@ -1,0 +1,23 @@
+player_id,player_name,team,diff_wl,prop_w,team_full,outcome,count
+41,Abigail Levy,NY,-3,0.2,New York,losses,4
+41,Abigail Levy,NY,-3,0.2,New York,wins,1
+6,Aerin Frankel,BOS,1,0.54,Boston,wins,7
+6,Aerin Frankel,BOS,1,0.54,Boston,losses,6
+28,Ann-Renée Desbiens,MTL,1,0.56,Montreal,wins,5
+28,Ann-Renée Desbiens,MTL,1,0.56,Montreal,losses,4
+155,Corinne Schroeder,NY,0,0.5,New York,wins,6
+155,Corinne Schroeder,NY,0,0.5,New York,losses,6
+85,Elaine Chuli,MTL,5,0.86,Montreal,wins,6
+85,Elaine Chuli,MTL,5,0.86,Montreal,losses,1
+59,Emerance Maschmeyer,OTT,2,0.57,Ottawa,wins,8
+59,Emerance Maschmeyer,OTT,2,0.57,Ottawa,losses,6
+19,Emma Söderberg,BOS,0,0.5,Boston,wins,3
+19,Emma Söderberg,BOS,0,0.5,Boston,losses,3
+70,Erica Howe,TOR,0,0.5,Toronto,wins,1
+70,Erica Howe,TOR,0,0.5,Toronto,losses,1
+64,Kristen Campbell,TOR,7,0.68,Toronto,wins,13
+64,Kristen Campbell,TOR,7,0.68,Toronto,losses,6
+123,Maddie Rooney,MIN,3,0.71,Minnesota,wins,5
+123,Maddie Rooney,MIN,3,0.71,Minnesota,losses,2
+22,Nicole Hensley,MIN,3,0.64,Minnesota,wins,7
+22,Nicole Hensley,MIN,3,0.64,Minnesota,losses,4
