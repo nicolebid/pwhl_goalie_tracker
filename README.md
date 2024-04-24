@@ -10,7 +10,7 @@ By providing a convenient way to interact with goalie statistics, like save perc
 
 ## App Description
 
-This app allows users to interact with a variety of goaltender statistics, including: save percentage, average goals against per game, shutouts, games played and the amount of wins and losses for each goalie. It also includes the trend in team standing throughout the season. Check out the video below for a demo. 
+This app allows users to interact with a variety of goaltender statistics, including: save percentage, average goals against per game, shutouts, games played and the amount of wins and losses for each goalie. It also includes the trend in team standings throughout the season. Check out the video below for a demo. 
 
 
 ## Installation Instructions 
@@ -51,4 +51,4 @@ PWHL Goalie Tracker is licensed under the MIT license. See [LICENSE.md](LICENSE.
 
 #### 📈 Data Source
 
-Data for the PWHL Goalie Tracker was sourced through [fastRhockey: The SportsDataverse's R Package for Hockey Data](ttps://fastRhockey.sportsdataverse.org), developed by Ben Howell and Saiem Gilani. The [GitHub released version](https://github.com/sportsdataverse/fastRhockey) was used.
+Data for the PWHL Goalie Tracker was sourced through [fastRhockey: The SportsDataverse's R Package for Hockey Data](https://fastRhockey.sportsdataverse.org) , developed by Ben Howell and Saiem Gilani. The [GitHub released version](https://github.com/sportsdataverse/fastRhockey) was used. Data processing steps can be found [here](https://github.ubc.ca/MDS-2023-24/DSCI_532_individual-assignment_nbidwell/blob/master/R/data_pull_process.R). 
