@@ -10,9 +10,7 @@ By providing a convenient way to interact with goalie statistics, like save perc
 
 ## App Description
 
-This app allows users to interact with a variety of goaltender statistics, including: save percentage, average goals against per game, shutouts, games played and the amount of wins and losses for each goalie. It also includes the trend in team standings throughout the season. Check out the video below for a demo. 
-
-https://media.github.ubc.ca/user/2872/files/675f4a0c-0ffa-4442-b484-6f0c459d54b2
+This app allows users to interact with a variety of goaltender statistics, including: save percentage, average goals against per game, shutouts, games played and the amount of wins and losses for each goalie. It also includes the trend in team standings throughout the season. 
 
 ## Installation Instructions 
 
