@@ -18,6 +18,10 @@ gwl_metrics <- c("wins", "losses", "win to loss differential",
 
 ui <- fluidPage(
   
+  tags$head(
+    tags$style(HTML("body { background-color: #FFFFFF;}"))
+  ),
+  
   theme = shinytheme("yeti"),
   
   # Header
@@ -25,10 +29,13 @@ ui <- fluidPage(
     column(
       width = 12,
       align = "center",
-      h1("PWHL Goalie Tracker", style = "color: white; font-size: 30px; 
-         background-color: darkslateblue; padding: 12px;")
-    )
+      h1("PWHL Goalie Tracker", 
+         style = "color: white; font-size: 30px; 
+                background: linear-gradient(135deg, darkslateblue, #9b59b6); 
+                padding: 12px; border-radius: 8px; font-weight: 300;")
+      )
   ),
+  
   
   # Main layout with two columns
   fluidRow(
@@ -39,7 +46,8 @@ ui <- fluidPage(
       
       # team selection
       div(
-        style = "background-color: #f2f2f2; padding: 10px; margin-bottom: 15px;",
+        style = "background-color: #f2f2f2; padding: 10px; margin-bottom: 10px;
+        border-radius: 8px;",
         selectizeInput(
           "team_select",
           "Select multiple teams:",
@@ -53,18 +61,20 @@ ui <- fluidPage(
         
       ), 
       
+      div(
+        style = "background-color: #f2f2f2; padding: 10px; margin-bottom: 5px;
+        border-radius: 8px;",
       # table
       DTOutput("sp_table"), 
       p("Click on a goalie to display additional statistics.", 
-        style = "font-style: italic;"),
-     
-       # individual goalie plot 
+        style = "font-style: italic; font-size: 11px"),
       div(
+        style = "background-color: #FFFFFF",
         textOutput("selected_goalie_title"),
         style = "margin-bottom: 0px; font-weight: bold;"
       ),
-      plotlyOutput("ind_plot", height = "150px")
-      
+      plotlyOutput("ind_plot", height = "130px")
+      )
     ),
 
     # COLUMN 2 (PLOTS)
@@ -72,13 +82,14 @@ ui <- fluidPage(
       width = 8,
       # Team Ranking plot
       div(
-        style = "background-color: #f2f2f2; padding: 10px; margin-bottom: 15px;",
+        style = "background-color: #f2f2f2; padding: 10px; margin-bottom: 15px;
+        border-radius: 8px;",
         plotlyOutput("team_plot", height = "325px")
       ),
       
       # GWL plot and order select
-      div(
-        style = "background-color: #f2f2f2; padding: 10px;",
+      div( 
+        style = "background-color: #f2f2f2; padding: 10px; border-radius: 8px;",
         plotOutput("gwl_plot", height = "325px"),
         selectizeInput(
           "gwl_select",
@@ -98,6 +109,7 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
+  
   
   # team ranking plot --------------------------------------------------------
   output$team_plot <- renderPlotly({
