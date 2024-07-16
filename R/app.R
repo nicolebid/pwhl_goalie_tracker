@@ -6,10 +6,11 @@ library(readr)
 library(ggrepel)
 library(plotly)
 library(DT)
+library(shinythemes)
 
-team_ranking <- read_csv("../data/team_ranking.csv") 
-goalie_wl <- read_csv("../data/goalie_wl.csv")
-save_goals <- read_csv("../data/save_goals.csv")
+team_ranking <- read_csv("data/team_ranking.csv") 
+goalie_wl <- read_csv("data/goalie_wl.csv")
+save_goals <- read_csv("data/save_goals.csv")
 
 teams <- c("Boston", "Minnesota", "Montreal", "New York",  "Ottawa", "Toronto")
 gwl_metrics <- c("wins", "losses", "win to loss differential", 
@@ -17,6 +18,8 @@ gwl_metrics <- c("wins", "losses", "win to loss differential",
 
 
 ui <- fluidPage(
+  
+  theme = shinytheme("yeti"),
   
   # Header
   fluidRow(
@@ -50,7 +53,6 @@ ui <- fluidPage(
         )
         
       ), 
-
       
       # table
       DTOutput("sp_table"), 
@@ -65,14 +67,14 @@ ui <- fluidPage(
       plotlyOutput("ind_plot", height = "150px")
       
     ),
-    
+
     # COLUMN 2 (PLOTS)
     column(
       width = 8,
       # Team Ranking plot
       div(
         style = "background-color: #f2f2f2; padding: 10px; margin-bottom: 15px;",
-        plotOutput("team_plot", height = "325px")
+        plotlyOutput("team_plot", height = "325px")
       ),
       
       # GWL plot and order select
@@ -98,101 +100,143 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   
   # team ranking plot --------------------------------------------------------
-  output$team_plot <- renderPlot({
-    team_colors <- c("New York" = rgb(0, 170, 170, maxColorValue = 255), 
-                     "Boston" = "darkgreen", 
+  output$team_plot <- renderPlotly({
+    team_colors <- c("New York" = rgb(0, 170, 170, maxColorValue = 255),
+                     "Boston" = "darkgreen",
                      "Toronto" = rgb(100, 149, 237, maxColorValue = 255),
-                     "Montreal" = "darkred", 
-                     "Ottawa" = "red", 
+                     "Montreal" = "darkred",
+                     "Ottawa" = "red",
                      "Minnesota" = "darkblue")
-    
-    # filter data for desired subset
-    filtered_data <- subset(team_ranking, team %in% input$team_select)
 
-    # Check if any teams are selected (default: plot all teams)
+    # # filter data for desired subset
+    # filtered_data <- subset(team_ranking, team %in% input$team_select)
+    
+
+    # Default Plot (all teams displayed)
     if (length(input$team_select) == 0) {
-      
-      # for annotations 
-      last_data <- team_ranking |> 
-        group_by(team) |> 
+
+      # for annotations
+      last_data <- team_ranking |>
+        group_by(team) |>
         summarize(last_game_date = max(game_date),
                   last_total_points = max(total_points))
       
-      # main plot 
-      ggplot(team_ranking) +
-        geom_line(aes(x=game_date, y=total_points, color=team)) + 
-        scale_color_manual(values = team_colors) + 
-        geom_text_repel(data = last_data, 
-                        aes(x = last_game_date, 
-                            y = last_total_points, label = team), 
-                        nudge_x = 10, nudge_y = 0, direction = "y" , 
-                        segment.alpha = 0.2) +
-        geom_point(data = last_data, 
-                   aes(x = last_game_date, y = last_total_points, color = team), 
+      last_data$x_numeric <- as.numeric(last_data$last_game_date)
+      
+
+      # main plot
+      p <- ggplot(team_ranking) +
+        geom_line(aes(x=game_date, y=total_points, color=team)) +
+        scale_color_manual(values = team_colors) +
+        geom_point(data = last_data,
+                   aes(x = last_game_date, y = last_total_points, color = team),
                    size = 2) +
-        xlim(as.Date('2024-01-01'), as.Date('2024-03-25')) + 
-        labs(title = "Team Overall Standings", 
-             y = "Cumulated Points", 
-             x = "Time", 
-             color = "Team") + 
-        theme_minimal() + 
-        theme(axis.line = element_line(color = "black"), 
-              legend.position = "None", 
-              plot.title = element_text(face = "bold", size = 14), 
-              axis.text = element_text(size = 14), 
-              axis.title.x = element_text(size = 14),
-              axis.title.y = element_text(size = 14)) + 
+        labs(title = "Team Overall Standings",
+             y = "Cumulated Points",
+             x = "Date",
+             color = "Team") +
+        theme_minimal() +
+        theme(axis.line = element_line(color = "black"),
+              legend.position = "None",
+              plot.title = element_text(face = "bold", size = 10),
+              axis.text = element_text(size = 10),
+              axis.title.x = element_text(size = 10),
+              axis.title.y = element_text(size = 10)) +
         scale_x_date(date_labels = "%b")
       
+      # Add annotations & hover
+      p <- ggplotly(p) |> 
+        add_annotations(
+          data = last_data,
+          x = ~x_numeric,
+          y = ~last_total_points,
+          text = ~team,
+          xref = "x",
+          yref = "y",
+          showarrow = TRUE,
+          arrowhead = 0,
+          arrowcolor = "lightgrey",
+          ax = 60,
+          ay = c(10, -5)
+        ) |> 
+        layout(showlegend = FALSE,
+               xaxis = list(range = as.numeric(c(as.Date('2024-01-01'), 
+                                                 as.Date('2024-06-01')))))
+      p
+  } 
+    else {
       
-    } else {
+      # filter data for desired subset
+      filtered_data <- subset(team_ranking, team %in% input$team_select)
       
       # teams in filtered
       unique_teams <- unique(filtered_data$team)
-      
+
       # colors of filtered teams
       team_colors_subset <- team_colors[unique_teams]
-      
+
       # order data by ranking
       ordered_data <- filtered_data %>%
         arrange(desc(total_points))
-      
-      # for annotations 
-      last_data <- ordered_data |> 
-        group_by(team) |> 
+
+      # for annotations
+      last_data <- ordered_data |>
+        group_by(team) |>
         summarize(last_game_date = max(game_date),
                   last_total_points = max(total_points))
-       
+      last_data$x_numeric <- as.numeric(last_data$last_game_date)
+
       # main plot
-      ordered_data |> 
+      p <- ordered_data |>
         ggplot() +
-        geom_line(aes(x=game_date, y=total_points, color=team)) + 
-        scale_color_manual(values = team_colors_subset) +
-        geom_text_repel(data = last_data, 
-                        aes(x = last_game_date, 
-                            y = last_total_points, label = team), 
-                        nudge_x = 10, nudge_y = 0, direction = "y" , 
-                        segment.alpha = 0.2) +
-        geom_point(data = last_data, 
-                   aes(x = last_game_date, y = last_total_points, 
-                       color = team), 
+        geom_line(aes(x=game_date, y=total_points, color=team)) +
+        scale_color_manual(values = team_colors_subset) + 
+        geom_point(data = last_data,
+                   aes(x = last_game_date, y = last_total_points,
+                       color = team),
                    size = 2) +
-        xlim(as.Date('2024-01-01'), as.Date('2024-03-25')) + 
-        labs(title = "Team Overall Standings", 
-             y = "Cumulated Points", 
-             x = "Time", 
-             color = "Team") + 
-        theme_minimal() + 
-        theme(axis.line = element_line(color = "black"), 
-              legend.position = "None", 
-              plot.title = element_text(face = "bold", size = 14), 
-              axis.text = element_text(size = 14), 
-              axis.title.x = element_text(size = 14),
-              axis.title.y = element_text(size = 14)) + 
+        labs(title = "Team Overall Standings",
+             y = "Cumulated Points",
+             x = "Date",
+             color = "Team") +
+        theme_minimal() +
+        theme(axis.line = element_line(color = "black"),
+              legend.position = "None",
+              plot.title = element_text(face = "bold", size = 10),
+              axis.text = element_text(size = 10),
+              axis.title.x = element_text(size = 10),
+              axis.title.y = element_text(size = 10)) +
         scale_x_date(date_labels = "%b")
+
+      # Add annotations
+      # check for tied teams 
+      if (anyDuplicated(last_data$last_total_points) > 0) {
+        ay_values <- c(5, -5)  
+      } else {
+        ay_values <- 0  
+      }
+      
+      p <- ggplotly(p) |> 
+        add_annotations(
+          data = last_data,
+          x = ~x_numeric,
+          y = ~last_total_points,
+          text = ~team,
+          xref = "x",
+          yref = "y",
+          showarrow = TRUE,
+          arrowhead = 0,
+          arrowcolor = "lightgrey",
+          ax = 60,
+          ay = ay_values
+        ) |> 
+        layout(showlegend = FALSE,
+               xaxis = list(range = as.numeric(c(as.Date('2024-01-01'), 
+                                                 as.Date('2024-06-01')))))
+      p
     }
   })
-  
+
   # Goalie win/loss plot  ----------------------------------------------------
   output$gwl_plot <- renderPlot({ 
     
@@ -426,9 +470,9 @@ server <- function(input, output, session) {
               options = list(paging = FALSE, 
                              info = FALSE, 
                              searching = FALSE)
-    )
-    
-  })
+    )  
+    })
+                             
   
   # Individual Goalie Plot -----------------------------------------------------
   output$ind_plot <- renderPlotly({ 
@@ -443,7 +487,6 @@ server <- function(input, output, session) {
     if (!is.null(goalie)) {
       
       goalie <- goalie[[1]]
-      
 
       # selected goalie stats 
       goalie_stats <- save_goals %>% 
