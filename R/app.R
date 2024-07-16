@@ -327,13 +327,12 @@ server <- function(input, output, session) {
               plot.title.position = "plot") +
         coord_flip() +
         geom_text(data = subset(goalie_wl_filter, outcome == "losses"),
-                  aes(label = !!sym(label_m), y = -count), hjust = 1.5,
+                  aes(label = !!sym(label_m), y = -count), hjust = 1.2,
                   color = "black", size = 4) +
         geom_text(data = subset(goalie_wl_filter, outcome == "wins"),
                   aes(label = team, y = count), hjust = -0.2,
                   color = "black", size = 4) +
         expand_limits(y = c(-8, 14))}
-      
     } else { 
     
     # filter data for desired subset
