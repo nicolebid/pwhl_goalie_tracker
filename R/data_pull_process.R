@@ -37,7 +37,8 @@ goalie_stats <- pwhl_stats() |>
     wins = as.numeric(wins),
     losses = as.numeric(losses),
     diff_wl = wins - losses, 
-    prop_w = round(wins / (wins + losses), 2)) |> 
+    games_played = as.numeric(games_played),
+    prop_w = round(wins / (games_played), 2)) |> 
   drop_na() |> 
   mutate(team_full = case_when(
     team == "NY" ~ "New York",
@@ -56,7 +57,6 @@ goalie_wl <- goalie_stats |>
   arrange(player_name, desc(count))
 
 goalie_wl$count <- as.numeric(goalie_wl$count)
-
 # write as csv
 write_csv(goalie_wl, here("data", "goalie_wl.csv"))
 
@@ -74,4 +74,5 @@ save_goals <- pwhl_stats() |>
 
 # write as csv
 write_csv(save_goals, here("data", "save_goals.csv"))
+
 

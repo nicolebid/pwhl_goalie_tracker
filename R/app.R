@@ -14,8 +14,7 @@ save_goals <- read_csv("data/save_goals.csv")
 
 teams <- c("Boston", "Minnesota", "Montreal", "New York",  "Ottawa", "Toronto")
 gwl_metrics <- c("wins", "losses", "win to loss differential", 
-                 "proportion of wins")
-
+                 "proportion of wins (wins/games_played)")
 
 ui <- fluidPage(
   
@@ -87,6 +86,7 @@ ui <- fluidPage(
           choices = gwl_metrics,
           multi = FALSE,
           selected = "wins",
+          width = "330px",
           options = list(
             placeholder = 'Sort by...',
             onInitialize = I('function() { this.setValue(""); }')
@@ -108,10 +108,6 @@ server <- function(input, output, session) {
                      "Ottawa" = "red",
                      "Minnesota" = "darkblue")
 
-    # # filter data for desired subset
-    # filtered_data <- subset(team_ranking, team %in% input$team_select)
-    
-
     # Default Plot (all teams displayed)
     if (length(input$team_select) == 0) {
 
@@ -122,7 +118,6 @@ server <- function(input, output, session) {
                   last_total_points = max(total_points))
       
       last_data$x_numeric <- as.numeric(last_data$last_game_date)
-      
 
       # main plot
       p <- ggplot(team_ranking) +
@@ -240,7 +235,7 @@ server <- function(input, output, session) {
   # Goalie win/loss plot  ----------------------------------------------------
   output$gwl_plot <- renderPlot({ 
     
-    # check if teams are selected (Default: plot all teams)
+    # check if teams are selected (Default: plot all goalies)
     if (length(input$team_select) == 0) {
       
       order_select <- input$gwl_select

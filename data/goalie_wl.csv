@@ -1,25 +1,27 @@
 player_id,player_name,team,diff_wl,prop_w,team_full,outcome,count
-41,Abigail Levy,NY,-4,0.17,New York,losses,5
-41,Abigail Levy,NY,-4,0.17,New York,wins,1
-6,Aerin Frankel,BOS,2,0.57,Boston,wins,8
-6,Aerin Frankel,BOS,2,0.57,Boston,losses,6
-28,Ann-Renée Desbiens,MTL,2,0.58,Montreal,wins,7
-28,Ann-Renée Desbiens,MTL,2,0.58,Montreal,losses,5
-155,Corinne Schroeder,NY,0,0.5,New York,wins,7
-155,Corinne Schroeder,NY,0,0.5,New York,losses,7
-85,Elaine Chuli,MTL,5,0.86,Montreal,wins,6
-85,Elaine Chuli,MTL,5,0.86,Montreal,losses,1
-59,Emerance Maschmeyer,OTT,0,0.5,Ottawa,wins,9
-59,Emerance Maschmeyer,OTT,0,0.5,Ottawa,losses,9
-19,Emma Söderberg,BOS,1,0.57,Boston,wins,4
-19,Emma Söderberg,BOS,1,0.57,Boston,losses,3
-70,Erica Howe,TOR,0,0.5,Toronto,wins,1
-70,Erica Howe,TOR,0,0.5,Toronto,losses,1
+41,Abigail Levy,NY,-4,0.12,New York,losses,5
+41,Abigail Levy,NY,-4,0.12,New York,wins,1
+6,Aerin Frankel,BOS,2,0.44,Boston,wins,8
+6,Aerin Frankel,BOS,2,0.44,Boston,losses,6
+28,Ann-Renée Desbiens,MTL,2,0.44,Montreal,wins,7
+28,Ann-Renée Desbiens,MTL,2,0.44,Montreal,losses,5
+155,Corinne Schroeder,NY,0,0.47,New York,wins,7
+155,Corinne Schroeder,NY,0,0.47,New York,losses,7
+85,Elaine Chuli,MTL,5,0.75,Montreal,wins,6
+85,Elaine Chuli,MTL,5,0.75,Montreal,losses,1
+59,Emerance Maschmeyer,OTT,0,0.39,Ottawa,wins,9
+59,Emerance Maschmeyer,OTT,0,0.39,Ottawa,losses,9
+19,Emma Söderberg,BOS,1,0.5,Boston,wins,4
+19,Emma Söderberg,BOS,1,0.5,Boston,losses,3
+70,Erica Howe,TOR,0,0.33,Toronto,wins,1
+70,Erica Howe,TOR,0,0.33,Toronto,losses,1
 64,Kristen Campbell,TOR,10,0.73,Toronto,wins,16
 64,Kristen Campbell,TOR,10,0.73,Toronto,losses,6
-154,Lindsey Post,NY,1,1,New York,wins,1
-154,Lindsey Post,NY,1,1,New York,losses,0
-123,Maddie Rooney,MIN,2,0.62,Minnesota,wins,5
-123,Maddie Rooney,MIN,2,0.62,Minnesota,losses,3
-22,Nicole Hensley,MIN,1,0.54,Minnesota,wins,7
-22,Nicole Hensley,MIN,1,0.54,Minnesota,losses,6
+154,Lindsey Post,NY,1,0.5,New York,wins,1
+154,Lindsey Post,NY,1,0.5,New York,losses,0
+123,Maddie Rooney,MIN,2,0.5,Minnesota,wins,5
+123,Maddie Rooney,MIN,2,0.5,Minnesota,losses,3
+22,Nicole Hensley,MIN,1,0.5,Minnesota,wins,7
+22,Nicole Hensley,MIN,1,0.5,Minnesota,losses,6
+48,Sandra Abstreiter,OTT,0,0,Ottawa,wins,0
+48,Sandra Abstreiter,OTT,0,0,Ottawa,losses,0
