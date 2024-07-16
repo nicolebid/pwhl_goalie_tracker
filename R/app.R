@@ -19,7 +19,7 @@ gwl_metrics <- c("wins", "losses", "win to loss differential",
 ui <- fluidPage(
   
   tags$head(
-    tags$style(HTML("body { background-color: #FFFFFF;}"))
+    tags$style(HTML("body { background-color: #6A6A6A;}"))
   ),
   
   theme = shinytheme("yeti"),
@@ -29,21 +29,32 @@ ui <- fluidPage(
     column(
       width = 12,
       align = "center",
-      h1("PWHL Goalie Tracker", 
-         style = "color: white; font-size: 30px; 
-                background: linear-gradient(135deg, darkslateblue, #9b59b6); 
-                padding: 12px; border-radius: 8px; font-weight: 300;")
+      div(
+        style = "background: linear-gradient(135deg, darkslateblue, #8a65a0); 
+                 padding: 14px; border-radius: 8px; 
+                 box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.3); 
+                 position: relative; margin: 10px 0;",
+        h1("PWHL Goalie Tracker", 
+           style = "color: white; font-size: 30px; margin: 0; text-align: center; 
+                    display: inline-block;font-weight: 420"),
+        actionButton("toggle_desc", "Learn More!", 
+                      style = "position: absolute; right: 20px; top: 12px; 
+                     border-radius: 8px; background: #F5F4F8;")
       )
+    )
   ),
   
+  # Description
+  uiOutput("description"), 
   
-  # Main layout with two columns
+  # Main layout (2 COLUMNS)
   fluidRow(
     
     # COLUMN 1
     column(
       width = 4,
-      
+      style = "padding-right: 6px",
+
       # team selection
       div(
         style = "background-color: #f2f2f2; padding: 10px; margin-bottom: 10px;
@@ -52,6 +63,7 @@ ui <- fluidPage(
           "team_select",
           "Select multiple teams:",
           choices = teams,
+          width = "500px",
           multi = TRUE,
           options = list(
             placeholder = 'teams...',
@@ -80,6 +92,8 @@ ui <- fluidPage(
     # COLUMN 2 (PLOTS)
     column(
       width = 8,
+      style = "padding-left: 6px;",
+      
       # Team Ranking plot
       div(
         style = "background-color: #f2f2f2; padding: 10px; margin-bottom: 15px;
@@ -110,6 +124,35 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   
+  # Description
+  show_desc <- reactiveVal(FALSE)
+  
+  observeEvent(input$toggle_desc, {
+    show_desc(!show_desc()) 
+  })
+  
+  output$description <- renderUI({
+    if (show_desc()) {
+      div(
+        style = "padding: 5px; color: white; text-align: center; 
+          background-color: #6A6A6A; border-radius: 8px; margin: 0;",
+        p("This app provides an interactive experience with a variety of 
+          goaltender statistics and team standings for the 2023-2024 PWHL season.", 
+          style = "font-size: 16px; font-weight: 300;"),
+        p("Begin by selecting your preferred teams, and dive into the exploration!", 
+          style = "font-size: 16px; font-weight: 300;"), 
+        p(
+          "For more details, check out the ", 
+          tags$a(href = "https://github.com/nicolebid/pwhl_goalie_tracker", 
+                 "source code", 
+                 style = "color: #D8BFD8; text-decoration: underline; 
+                 font-style: italic;"), 
+          " on GitHub.", 
+          style = "font-size: 14px; font-weight: 300;font-style: italic;"
+        )
+      )
+    }
+  })
   
   # team ranking plot --------------------------------------------------------
   output$team_plot <- renderPlotly({
@@ -215,7 +258,7 @@ server <- function(input, output, session) {
               axis.title.y = element_text(size = 10)) +
         scale_x_date(date_labels = "%b")
 
-      # Add annotations
+      # ANNOTATIONS
       # check for tied teams 
       if (anyDuplicated(last_data$last_total_points) > 0) {
         ay_values <- c(5, -5)  
@@ -444,7 +487,7 @@ server <- function(input, output, session) {
                   color = "black", size = 4) +
         expand_limits(y = c(-8, 14))
       
-    }
+      }
     }
   })
   
@@ -477,7 +520,7 @@ server <- function(input, output, session) {
                              info = FALSE, 
                              searching = FALSE)
     )  
-    })
+  })
                              
   
   # Individual Goalie Plot -----------------------------------------------------
@@ -529,7 +572,7 @@ server <- function(input, output, session) {
         Average = c(avg_stats$goals_against_avg, 
                     avg_stats$shutouts, 
                     avg_stats$games_played)
-      )
+    )
       
       goalie_plot <- ggplot(goalie_data, aes(y = Metric)) +
         geom_point(aes(x = Average), color = "darkred", size = 2, shape = 18) + 
@@ -543,7 +586,6 @@ server <- function(input, output, session) {
       return(ggplotly(goalie_plot, tooltip = c("Average")))
       
     }
-    
   })
   
   output$selected_goalie_title <- renderText({
@@ -554,14 +596,13 @@ server <- function(input, output, session) {
       goalie_title <- paste(
         "Statistics for", goalie, "with Goalie Averages"
       )
-
+      
       return(goalie_title)
 
     } else {
       return("Goalie Averages")
     }
   })
-
 }
 
 shinyApp(ui, server)
