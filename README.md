@@ -1,5 +1,7 @@
 # PWHL Goalie Tracker 🥅
 
+An interactive dashboard showcasing goalie statistics and team rankings for the inaugural season of the PWHL.
+
 ## Motivation
 
 **Target Audience:** Hockey fans!
@@ -10,7 +12,13 @@ By providing a convenient way to interact with goalie statistics, like save perc
 
 ## App Description
 
-This app allows users to interact with a variety of goaltender statistics, including: save percentage, average goals against per game, shutouts, games played and the amount of wins and losses for each goalie. It also includes the trend in team standings throughout the season. 
+This app allows users to interact with a variety of goaltender statistics, including: save percentage, average goals against per game, shutouts, games played and the amount of wins and losses for each goalie. It also includes the trend in team standings throughout the season.
+
+On the dashboard, start your exploration by selecting your preferred teams. Hover over the Team Overall Standings for team point throughout the season. Compare win-loss statistics for each goalie, or click on a goalie in the table to uncover detailed statistics and see how they stack up against the average!. 
+
+To start using using the app, click here: [PWHL Goalie Tracker](https://2wc8dv-nicole-bidwell.shinyapps.io/pwhl_goalie_tracker/)
+
+
 
 ## Installation Instructions 
 
@@ -19,12 +27,12 @@ To run the dashboard locally follow the steps below.
 1. Clone the repository. In your terminal run:
 
     ```console
-    $ git clone https://github.ubc.ca/MDS-2023-24/DSCI_532_individual-assignment_nbidwell.git
+    $ git clone https://github.com/nicolebid/pwhl_goalie_tracker.git 
     ```
 
 2. Navigate to the root of the directory: 
     ```console
-    $ cd DSCI_532_individual-assignment_nbidwell/
+    $ cd pwhl_goalie_tracker 
     ```
     
 4. Open R or Rstudio, and install `renv` if you don't have it: 
@@ -38,14 +46,13 @@ To run the dashboard locally follow the steps below.
     $ renv::restore()
     ```
 
-3. To run the dashboard, from the root of the directory (`DSCI_532_individual-assignment_nbidwell`) run: 
+3. To run the dashboard, from the root of the directory (`pwhl_goalie_tracker`) run: 
 
     ```console
     $ shiny::runApp("R")
     ```
 
-4. Click on the displayed link in the output to open the dashboard, if it does not open automatically. 
-
+4. Click on the displayed link in the output to open the dashboard, if it does not open automatically.
 
 ## License
 
