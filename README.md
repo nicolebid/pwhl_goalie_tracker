@@ -14,15 +14,15 @@ By providing a convenient way to interact with goalie statistics, like save perc
 
 This app allows users to interact with a variety of goaltender statistics, including: save percentage, average goals against per game, shutouts, games played and the amount of wins and losses for each goalie. It also includes the trend in team standings throughout the season.
 
-On the dashboard, start your exploration by selecting your preferred teams. Hover over the Team Overall Standings for team point throughout the season. Compare win-loss statistics for each goalie, or click on a goalie in the table to uncover detailed statistics and see how they stack up against the average!. 
+## Usage
 
 To start using using the app, click here: [PWHL Goalie Tracker](https://2wc8dv-nicole-bidwell.shinyapps.io/pwhl_goalie_tracker/)
 
+On the dashboard, start your exploration by selecting your preferred teams. Hover over the Team Overall Standings for team point throughout the season. Compare win-loss statistics for each goalie, or click on a goalie in the table to uncover detailed statistics and see how they stack up against the average!
 
+## Development  
 
-## Installation Instructions 
-
-To run the dashboard locally follow the steps below. 
+To run the dashboard locally follow the installation steps below. 
 
 1. Clone the repository. In your terminal run:
 
@@ -35,24 +35,31 @@ To run the dashboard locally follow the steps below.
     $ cd pwhl_goalie_tracker 
     ```
     
-4. Open R or Rstudio, and install `renv` if you don't have it: 
+3. Open R or Rstudio, and install `renv` if you don't have it: 
 
     ```console
     $ install.packages("renv")
     ```
-3. Install the package dependencies in the `renv.lock` file: 
+4. Install the package dependencies in the `renv.lock` file: 
 
     ```console
     $ renv::restore()
     ```
 
-3. To run the dashboard, from the root of the directory (`pwhl_goalie_tracker`) run: 
+5. To run the dashboard, from the root of the directory (`pwhl_goalie_tracker`) run: 
 
     ```console
     $ shiny::runApp("R")
     ```
 
-4. Click on the displayed link in the output to open the dashboard, if it does not open automatically.
+6. Click on the displayed link in the output to open the dashboard, if it does not open automatically.
+
+
+## Contact
+
+If you'd like to suggest a new feature or if you experience a problem while using the dashboard, please open an [issue](https://github.com/nicolebid/pwhl_goalie_tracker/issues). For problems, please include: 
+- A description of the problem, indicating details that would be helpful in troubleshooting.
+- Detailed steps to reproduce the problem.
 
 ## License
 
