@@ -72,4 +72,4 @@ If you'd like to suggest a new feature or if you experience a problem while usin
 
 #### 📈 Data Source
 
-Data for the PWHL Goalie Tracker was sourced through [fastRhockey: The SportsDataverse's R Package for Hockey Data](https://fastRhockey.sportsdataverse.org) , developed by Ben Howell and Saiem Gilani. The [GitHub released version](https://github.com/sportsdataverse/fastRhockey) was used. Data preprocessing steps can be found [here](https://github.ubc.ca/MDS-2023-24/DSCI_532_individual-assignment_nbidwell/blob/master/R/data_pull_process.R). 
+Data for the PWHL Goalie Tracker was sourced through [fastRhockey: The SportsDataverse's R Package for Hockey Data](https://fastRhockey.sportsdataverse.org), developed by Ben Howell and Saiem Gilani. The [GitHub released version](https://github.com/sportsdataverse/fastRhockey) was used. Data preprocessing steps can be found [here](R/data_pull_process.R). 
