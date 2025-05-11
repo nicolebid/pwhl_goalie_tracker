@@ -137,9 +137,9 @@ server <- function(input, output, session) {
         style = "padding: 5px; color: white; text-align: center; 
           background-color: #6A6A6A; border-radius: 8px; margin: 0;",
         p("This app provides an interactive experience with a variety of 
-          goaltender statistics and team standings for the 2023-2024 PWHL season.", 
+          goaltender statistics and team standings for the 2024 PWHL regular season games.", 
           style = "font-size: 16px; font-weight: 300;"),
-        p("Begin by selecting your preferred teams, and dive into the exploration!", 
+        p("Begin by selecting your preferred teams and dive into the exploration!", 
           style = "font-size: 16px; font-weight: 300;"), 
         p(
           "For more details, check out the ", 
@@ -561,7 +561,7 @@ server <- function(input, output, session) {
              x = NULL) +
         theme_minimal() +
         theme(axis.text = element_text(size = 8)) + 
-        xlim(0, 20)
+        xlim(0, 25)
       
       return(ggplotly(goalie_plot, tooltip = c("Value", "Average")))
       
@@ -581,7 +581,7 @@ server <- function(input, output, session) {
              x = NULL) +
         theme_minimal() +
         theme(axis.text = element_text(size = 8)) + 
-        xlim(0, 20)
+        xlim(0, 25)
       
       return(ggplotly(goalie_plot, tooltip = c("Average")))
       
